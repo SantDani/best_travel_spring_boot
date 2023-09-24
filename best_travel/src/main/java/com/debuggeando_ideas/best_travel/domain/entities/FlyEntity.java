@@ -14,6 +14,10 @@ import java.math.BigDecimal;
 
 
 @Entity(name = "fly")
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@Builder
 public class FlyEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
