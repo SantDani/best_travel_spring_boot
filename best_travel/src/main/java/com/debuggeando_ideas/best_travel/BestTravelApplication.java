@@ -1,7 +1,7 @@
 package com.debuggeando_ideas.best_travel;
 
-import com.debuggeando_ideas.best_travel.repositories.FlyRepository;
-import com.debuggeando_ideas.best_travel.repositories.HotelRepository;
+import com.debuggeando_ideas.best_travel.domain.entities.ReservationEntity;
+import com.debuggeando_ideas.best_travel.repositories.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -14,10 +14,34 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class BestTravelApplication  implements CommandLineRunner{
 
-	@Autowired
-	private HotelRepository hotelRepository;
-	@Autowired
-	private FlyRepository flyRepository;
+
+	private final HotelRepository hotelRepository;
+
+	private final FlyRepository flyRepository;
+
+	private final CustomerRepository customerRepository;
+
+	private final ReservationRepository reservationRepository;
+
+	private final TicketRepository ticketRepository;
+
+	private final TourRepository tourRepository;
+
+	public BestTravelApplication(
+			HotelRepository hotelRepository,
+			FlyRepository flyRepository,
+			CustomerRepository customerRepository,
+			ReservationRepository reservationRepository,
+			TicketRepository ticketRepository,
+			TourRepository tourRepository) {
+		this.hotelRepository = hotelRepository;
+		this.flyRepository = flyRepository;
+		this.customerRepository = customerRepository;
+		this.reservationRepository = reservationRepository;
+		this.ticketRepository = ticketRepository;
+		this.tourRepository = tourRepository;
+	}
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(BestTravelApplication.class, args);
