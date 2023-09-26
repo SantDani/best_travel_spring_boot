@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Set;
 
 
 @Entity(name = "fly")
@@ -26,16 +27,25 @@ public class FlyEntity implements Serializable {
     private Long id;
     private Double originLat;
     private Double originLng;
-    private Double destinityLng;
-    private Double destinityLat;
+    private Double destinyLng;
+    //destiny_lat
+    private Double destinyLat;
     private BigDecimal price;
     @Column(length = 20)
     private String originName;
     @Column(length = 20)
-    private String destinityName;
+    private String destinyName;
     @Column(length = 20)
     @Enumerated(EnumType.STRING)
-    private AeroLine areoLine;
+    private AeroLine aeroLine;
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER, // EAGER: Carga todos los datos de la relación
+            orphanRemoval = true, // Elimina los datos huérfanos
+            mappedBy = "fly" // Donde "fly" es el nombre de la variable en TicketEntity
+    )
+    private Set<TicketEntity> tickets;
 
 
 
