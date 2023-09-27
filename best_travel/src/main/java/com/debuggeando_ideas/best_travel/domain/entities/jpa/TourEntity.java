@@ -1,10 +1,7 @@
-package com.debuggeando_ideas.best_travel.domain.entities;
+package com.debuggeando_ideas.best_travel.domain.entities.jpa;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -18,9 +15,10 @@ public class TourEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(
             cascade = CascadeType.ALL,
             fetch = FetchType.EAGER, // EAGER: Carga todos los datos de la relación
@@ -28,6 +26,9 @@ public class TourEntity implements Serializable {
             mappedBy = "tour" // Donde "fly" es el nombre de la variable en TicketEntity
     )
     private Set<ReservationEntity> reservations;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(
             cascade = CascadeType.ALL,
             fetch = FetchType.EAGER, // EAGER: Carga todos los datos de la relación

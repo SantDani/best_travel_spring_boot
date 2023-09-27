@@ -1,11 +1,7 @@
-package com.debuggeando_ideas.best_travel.domain.entities;
+package com.debuggeando_ideas.best_travel.domain.entities.jpa;
 
-import com.debuggeando_ideas.best_travel.util.AeroLine;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -24,15 +20,17 @@ public class HotelEntity implements Serializable {
     private String name;
     @Column(length = 50)
     private String address;
-    private int rating;
+    private Integer rating;
     private BigDecimal price;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(
             cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
             orphanRemoval = true,
             mappedBy = "hotel"
     )
-    private Set<ReservationEntity> reservations;
+    private Set<ReservationEntity> reservation;
 
 }

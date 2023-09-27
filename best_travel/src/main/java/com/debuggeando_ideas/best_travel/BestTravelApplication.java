@@ -1,13 +1,13 @@
 package com.debuggeando_ideas.best_travel;
 
-import com.debuggeando_ideas.best_travel.domain.entities.ReservationEntity;
 import com.debuggeando_ideas.best_travel.repositories.*;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 
 @SpringBootApplication
@@ -27,6 +27,15 @@ public class BestTravelApplication  implements CommandLineRunner{
 
 	private final TourRepository tourRepository;
 
+	/**
+	 * Constructor injection for all repositories
+	 * @param hotelRepository
+	 * @param flyRepository
+	 * @param customerRepository
+	 * @param reservationRepository
+	 * @param ticketRepository
+	 * @param tourRepository
+	 */
 	public BestTravelApplication(
 			HotelRepository hotelRepository,
 			FlyRepository flyRepository,
@@ -47,14 +56,27 @@ public class BestTravelApplication  implements CommandLineRunner{
 		SpringApplication.run(BestTravelApplication.class, args);
 	}
 
+	/**
+	 * This method is used to test the repositories
+	 *
+	 * @transactional is used to avoid the LazyInitializationException from TicketRepository and ReservationRepository
+	 * @param args
+	 * @throws Exception
+	 */
 	@Override
+	@Transactional
 	public void run(String... args) throws Exception {
-		var hotel = hotelRepository.findById(15L);
-		var fly = flyRepository.findById(7L);
-		System.out.println("Hello World");
+		var hotel = hotelRepository.findById(15L).get();
+		var fly = flyRepository.findById(7L).get();
+		var ticket = ticketRepository.findById(UUID.fromString("22345678-1234-5678-3235-567812345678")).get();
+		var reservation = reservationRepository.findById(UUID.fromString("12345678-1234-5678-1234-567812345678")).get();
+		var customer = customerRepository.findById("GOTW771012HMRGR087").get();
 
 		log.info(String.valueOf(fly));
-		log.info(String.valueOf(hotel));
+		log.info(String.valueOf(hotel));// se soluciona con @Transactional
+		log.info(String.valueOf(ticket));// se soluciona con @Transactional
+		log.info(String.valueOf(reservation));
+		log.info(String.valueOf(customer));
 	}
 
 }

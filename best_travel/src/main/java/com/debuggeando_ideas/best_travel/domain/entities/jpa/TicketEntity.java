@@ -1,4 +1,4 @@
-package com.debuggeando_ideas.best_travel.domain.entities;
+package com.debuggeando_ideas.best_travel.domain.entities.jpa;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
