@@ -64,7 +64,7 @@ public class BestTravelApplication  implements CommandLineRunner{
 	 * @throws Exception
 	 */
 	@Override
-	@Transactional
+	//@Transactional
 	public void run(String... args) throws Exception {
 		var hotel = hotelRepository.findById(15L).get();
 		var fly = flyRepository.findById(7L).get();

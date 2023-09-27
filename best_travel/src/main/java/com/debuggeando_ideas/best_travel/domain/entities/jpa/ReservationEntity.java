@@ -1,10 +1,7 @@
 package com.debuggeando_ideas.best_travel.domain.entities.jpa;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -26,15 +23,20 @@ public class ReservationEntity implements Serializable {
     private Integer totalDays;
     private BigDecimal price;
 
-
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_id") // representa la FOREIGN KEY
     private HotelEntity hotel;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tour_id", nullable = true) // representa la FOREIGN KEY
     private TourEntity tour;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id") // representa la FOREIGN KEY
     private CustomerEntity customer;
