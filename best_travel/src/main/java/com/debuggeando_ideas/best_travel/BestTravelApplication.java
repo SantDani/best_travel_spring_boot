@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 
@@ -66,6 +67,21 @@ public class BestTravelApplication  implements CommandLineRunner{
 	@Override
 	//@Transactional
 	public void run(String... args) throws Exception {
+		//testRelationEntities();
+
+		testFlyRepository();
+	}
+
+	private void testFlyRepository() {
+		log.info("----------------------selectLessPrice----------------------------");
+		this.flyRepository.selectLessPrice(BigDecimal.valueOf(20)).forEach(f -> log.info("selectLessPrice: "+ f));
+		log.info("----------------------selectBetweenPrice----------------------------");
+		this.flyRepository.selectBetweenPrice(BigDecimal.valueOf(20), BigDecimal.valueOf(30)).forEach(f -> log.info("selectBetweenPrice: " + f));
+		log.info("-------------------------selectOriginDestiny-------------------------");
+		this.flyRepository.selectOriginDestiny("Grecia", "Mexico").forEach(f -> log.info("selectOriginDestiny:"+ f));
+	}
+
+	private void testRelationEntities() {
 		var hotel = hotelRepository.findById(15L).get();
 		var fly = flyRepository.findById(7L).get();
 		var ticket = ticketRepository.findById(UUID.fromString("22345678-1234-5678-3235-567812345678")).get();
@@ -78,5 +94,6 @@ public class BestTravelApplication  implements CommandLineRunner{
 		log.info(String.valueOf(reservation));
 		log.info(String.valueOf(customer));
 	}
+
 
 }
