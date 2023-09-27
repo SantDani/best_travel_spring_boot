@@ -3,6 +3,26 @@ package com.debuggeando_ideas.best_travel.repositories;
 
 import com.debuggeando_ideas.best_travel.domain.entities.jpa.FlyEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.math.BigDecimal;
+import java.util.Set;
 
 public interface FlyRepository extends JpaRepository<FlyEntity, Long> {
+
+    /**
+     * Consultas JPQL (Java Persistence Query language)
+     * Es similar al SQL, pero el JPQL trabaja con entidades y atributos de entidades,
+     * en lugar de las tablas y columnas de la base de datos
+     */
+
+    @Query("select f from fly f where f.price < :price")
+    Set<FlyEntity> selectLessPrice(@Param("price") BigDecimal price);
+
+    @Query("select f from fly f where f.price between :min and :max")
+    Set<FlyEntity> selectBetweenPrice(BigDecimal min, BigDecimal max);
+
+    @Query("select f from fly f where f.origin.name = :origin_name and f.destiny_name = :destiny_name")
+    Set<FlyEntity> selectOriginDestinity(String origin_name, String destiny_name);
 }
