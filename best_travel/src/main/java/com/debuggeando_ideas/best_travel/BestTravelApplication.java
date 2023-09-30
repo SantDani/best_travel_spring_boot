@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.math.BigDecimal;
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -73,8 +74,30 @@ public class BestTravelApplication  implements CommandLineRunner{
 
 		//testFlyRepository();
 
+
 		joinWithJPQLFindById();
 		joinWithJPQLFindByTicketId();
+
+
+		// **************************************************************
+
+		testHotelRepository();
+
+	}
+
+	private void testHotelRepository(){
+
+		Set<HotelEntity> hotel = this.hotelRepository.findByPriceLessThan(BigDecimal.valueOf(100));
+
+		hotel.forEach(h -> log.info("findByPriceLessThan: " + h));
+
+		hotel = this.hotelRepository.findByPriceBetween(BigDecimal.valueOf(100), BigDecimal.valueOf(200));
+
+		hotel.forEach(h -> log.info("findByPriceBetween: " + h));
+
+		hotel = this.hotelRepository.findByRatingGreaterThan(3);
+
+		hotel.forEach(h -> log.info("findByRatingGreaterThan: " + h));
 	}
 
 	/**
@@ -93,6 +116,8 @@ public class BestTravelApplication  implements CommandLineRunner{
 		log.info("We only get a Fly without Tickets (without join) ( because is Fetch.EAGER)" + fly.toString());
 		// We are executing the query: select * from fly f join ticket t on f.id = t.fly_id where f.id = 1;
 		fly.getTickets().forEach(f -> log.info("We can see all the tickets (with join): "+ f));
+
+
 	}
 
 	/**
