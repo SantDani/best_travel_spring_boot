@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity(name = "tour")
@@ -39,4 +41,40 @@ public class TourEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_customer")
     private CustomerEntity customer;
+
+    public void addTicket(TicketEntity ticket) {
+        if((Objects.isNull(this.tickets))){
+            this.tickets = new HashSet<>();
+        }
+        tickets.add(ticket);
+    }
+
+    public void removeTicket(TicketEntity ticket) {
+        if((Objects.isNull(this.tickets))){
+            this.tickets = new HashSet<>();
+        }
+        tickets.remove(ticket);
+    }
+
+    public void updateTickets(){
+        tickets.forEach(ticket -> ticket.setTour(this));
+    }
+
+    public void addReservation(ReservationEntity reservation) {
+        if((Objects.isNull(this.reservations))){
+            this.reservations = new HashSet<>();
+        }
+        reservations.add(reservation);
+    }
+
+    public void removeReservation(ReservationEntity reservation) {
+        if((Objects.isNull(this.reservations))){
+            this.reservations = new HashSet<>();
+        }
+        reservations.remove(reservation);
+    }
+
+    public void updateReservations(){
+        reservations.forEach(reservation -> reservation.setTour(this));
+    }
 }

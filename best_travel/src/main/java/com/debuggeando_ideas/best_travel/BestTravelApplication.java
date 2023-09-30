@@ -1,15 +1,17 @@
 package com.debuggeando_ideas.best_travel;
 
-import com.debuggeando_ideas.best_travel.domain.entities.jpa.FlyEntity;
-import com.debuggeando_ideas.best_travel.domain.entities.jpa.HotelEntity;
+import com.debuggeando_ideas.best_travel.domain.entities.jpa.*;
 import com.debuggeando_ideas.best_travel.repositories.*;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cglib.core.Local;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -76,13 +78,87 @@ public class BestTravelApplication  implements CommandLineRunner{
 		//testFlyRepository();
 
 
-		joinWithJPQLFindById();
-		joinWithJPQLFindByTicketId();
+		//joinWithJPQLFindById();
+		//joinWithJPQLFindByTicketId();
 
 
 		// **************************************************************
 
-		testHotelRepository();
+		//testHotelRepository();
+
+
+		// ************************** Insert Tours ************************************
+
+		insertTours();
+
+	}
+
+	/**
+	 * Insert Tours
+	 *
+	 * <p> We need to insert a new tour with a customer, a fly and a hotel </p>
+	 * <br>
+	 * <br>
+	 * Query:
+	 * <code>
+	 *
+	 *
+	 * </code>
+	 */
+	private void insertTours() {
+
+		CustomerEntity customer = customerRepository.findById("GOTW771012HMRGR087").get();
+		var fly = flyRepository.findById(1L).get();
+		var hotel = hotelRepository.findById(15L).get();
+
+
+		// We need add a new tour
+
+		TourEntity tour = TourEntity.builder()
+				.customer(customer)
+				.build();
+
+
+		log.info("Customer: " + customer);
+		log.info("Fly from: " + fly.getOriginName() + " to: " + fly.getDestinyName());
+		log.info("Hotel: " + hotel.getName());
+
+		TicketEntity ticket = TicketEntity.builder()
+				.id(UUID.randomUUID())
+				.price(fly.getPrice().multiply(BigDecimal.TEN)) // price * 10
+				.departureDate(LocalDateTime.now())
+				.arrivalDate(LocalDateTime.now().plusHours(8))
+				.purchaseDate(LocalDate.now())
+				.customer(customer)
+				.tour(tour)
+				.fly(fly)
+				.build();
+
+
+		ReservationEntity reservation = ReservationEntity.builder()
+				.id(UUID.randomUUID())
+				.dateTimeReservation(LocalDateTime.now())
+				.dateStart(LocalDate.now().plusDays(1))
+				.dateEnd(LocalDate.now().plusDays(10))
+				.hotel(hotel)
+				.customer(customer)
+				.tour(tour)
+				.totalDays(9)
+				.price(hotel.getPrice().multiply(BigDecimal.TEN)) // price * 10
+				.build();
+
+
+
+
+		tour.addReservation(reservation);
+		tour.updateReservations();
+
+		tour.addTicket(ticket);
+		tour.updateTickets();
+
+		log.info(" SAVING tour: " + tour);
+		this.tourRepository.save(tour);
+
 
 	}
 
