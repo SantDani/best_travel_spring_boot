@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -98,6 +99,14 @@ public class BestTravelApplication  implements CommandLineRunner{
 		hotel = this.hotelRepository.findByRatingGreaterThan(3);
 
 		hotel.forEach(h -> log.info("findByRatingGreaterThan: " + h));
+
+
+
+		HotelEntity hotelEntity = this.hotelRepository.findByReservationId(UUID.fromString("52345678-1234-5678-1234-567812345678")).get();
+
+		log.info("findByReservationId (with join): " + hotelEntity);
+
+
 	}
 
 	/**
