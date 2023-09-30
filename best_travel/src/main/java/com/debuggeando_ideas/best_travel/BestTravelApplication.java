@@ -89,7 +89,7 @@ public class BestTravelApplication  implements CommandLineRunner{
 
 		// ************************** Insert Tours ************************************
 
-		insertTours();
+		insertTours(false);
 
 	}
 
@@ -105,7 +105,7 @@ public class BestTravelApplication  implements CommandLineRunner{
 	 *
 	 * </code>
 	 */
-	private void insertTours() {
+	private void insertTours(boolean enableDelete) {
 
 		CustomerEntity customer = customerRepository.findById("GOTW771012HMRGR087").get();
 		var fly = flyRepository.findById(1L).get();
@@ -157,7 +157,12 @@ public class BestTravelApplication  implements CommandLineRunner{
 		tour.updateTickets();
 
 		log.info(" SAVING tour: " + tour);
-		this.tourRepository.save(tour);
+		var tourSaved = this.tourRepository.save(tour);
+		if(enableDelete){
+
+			this.tourRepository.deleteById(tourSaved.getId());
+			log.info(" DELETED tour: " + tourSaved);
+		}
 
 
 	}

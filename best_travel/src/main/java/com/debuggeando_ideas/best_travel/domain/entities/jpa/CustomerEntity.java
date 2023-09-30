@@ -50,7 +50,7 @@ public class CustomerEntity implements Serializable {
     @EqualsAndHashCode.Exclude
     @OneToMany(
             cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
+            fetch = FetchType.LAZY,// LAZY is important to avoid conflicts with Tour.deleteById()
             orphanRemoval = true,
             mappedBy = "customer"
     )

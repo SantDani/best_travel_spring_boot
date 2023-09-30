@@ -67,6 +67,12 @@ public class TourEntity implements Serializable {
         reservations.add(reservation);
     }
 
+    /**
+     * Elimina una reserva de la lista de reservas
+     *
+     * It works because TourEntity have orphanRemoval = true, so when a reservation is removed from the list, it is also removed from the database
+     * @param reservation reservation to be removed
+     */
     public void removeReservation(ReservationEntity reservation) {
         if((Objects.isNull(this.reservations))){
             this.reservations = new HashSet<>();
