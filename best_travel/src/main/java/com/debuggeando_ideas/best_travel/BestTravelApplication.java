@@ -1,5 +1,7 @@
 package com.debuggeando_ideas.best_travel;
 
+import com.debuggeando_ideas.best_travel.domain.entities.jpa.FlyEntity;
+import com.debuggeando_ideas.best_travel.domain.entities.jpa.HotelEntity;
 import com.debuggeando_ideas.best_travel.repositories.*;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -69,7 +71,49 @@ public class BestTravelApplication  implements CommandLineRunner{
 	public void run(String... args) throws Exception {
 		//testRelationEntities();
 
-		testFlyRepository();
+		//testFlyRepository();
+
+		joinWithJPQLFindById();
+		joinWithJPQLFindByTicketId();
+	}
+
+	/**
+	 * Imaginemos que me quiero traer todos los tickets correspondientes a un vuelo
+	 *
+	 * Para ello, necesito hacer un join con la tabla ticket.
+	 * <br>
+	 * <br>
+	 *SQL:
+	 * <code> select * from fly f join ticket t on f.id = t.fly_id where f.id = 1;</code>
+	 */
+	private void joinWithJPQLFindById() {
+
+		log.info("----------------------joinWithJPQL----------------------------");
+		FlyEntity fly=  this.flyRepository.findById(1L).get();
+		log.info("We only get a Fly without Tickets (without join) ( because is Fetch.EAGER)" + fly.toString());
+		// We are executing the query: select * from fly f join ticket t on f.id = t.fly_id where f.id = 1;
+		fly.getTickets().forEach(f -> log.info("We can see all the tickets (with join): "+ f));
+	}
+
+	/**
+	 * Buscar un vuelo por el id del ticket
+	 * <br>
+	 * <br>
+	 * <code>
+	 * 	SELECT f.* <br>
+	 * 	FROM fly f <br>
+	 * 	INNER JOIN ticket t ON f.id = t.fly_id <br>
+	 * 	WHERE t.id = '12345678-1234-5678-2236-567812345678';
+	 * </code>
+	 *
+	 */
+	private void joinWithJPQLFindByTicketId(){
+		FlyEntity fly=  this.flyRepository.findById(1L).get();
+		// We can get the fly by the ticket id
+		fly = flyRepository.findByTicketId(UUID.fromString("12345678-1234-5678-2236-567812345678")).get();
+
+		log.info("Result: " + fly.toString());
+
 	}
 
 	private void testFlyRepository() {
@@ -82,8 +126,8 @@ public class BestTravelApplication  implements CommandLineRunner{
 	}
 
 	private void testRelationEntities() {
-		var hotel = hotelRepository.findById(15L).get();
-		var fly = flyRepository.findById(7L).get();
+		HotelEntity hotel = hotelRepository.findById(15L).get();
+		FlyEntity fly = flyRepository.findById(7L).get();
 		var ticket = ticketRepository.findById(UUID.fromString("22345678-1234-5678-3235-567812345678")).get();
 		var reservation = reservationRepository.findById(UUID.fromString("12345678-1234-5678-1234-567812345678")).get();
 		var customer = customerRepository.findById("GOTW771012HMRGR087").get();
